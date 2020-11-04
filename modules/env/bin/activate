@@ -37,7 +37,7 @@ deactivate () {
 # unset irrelevant variables
 deactivate nondestructive
 
-VIRTUAL_ENV="/Users/hung/Workplace/udacity/nd064-c2-message-passing-projects-starter/modules/api-person/env"
+VIRTUAL_ENV="/Users/hung/Workplace/udacity/message-passing-project/modules/env"
 export VIRTUAL_ENV
 
 _OLD_VIRTUAL_PATH="$PATH"

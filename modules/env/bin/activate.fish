@@ -29,7 +29,7 @@ end
 # unset irrelevant variables
 deactivate nondestructive
 
-set -gx VIRTUAL_ENV "/Users/hung/Workplace/udacity/nd064-c2-message-passing-projects-starter/modules/api-person/env"
+set -gx VIRTUAL_ENV "/Users/hung/Workplace/udacity/message-passing-project/modules/env"
 
 set -gx _OLD_VIRTUAL_PATH $PATH
 set -gx PATH "$VIRTUAL_ENV/bin" $PATH
