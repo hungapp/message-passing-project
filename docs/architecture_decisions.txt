@@ -1,0 +1,30 @@
+Modules:
+  - Location: has the original logic with one endpoint "/locations" supporting get and post methods.
+    Schema and model also remain intact.
+  - Person: should just holds the logic for creating and retrieving person data. As such, it also
+    uses only one endpoint "/persons" which supports get and post methods.
+  - Connection: now uses a new endpoint "/connections/<person_id>", the logic still remains, however,
+    when and how it works has been improved.
+
+Message Passing Protocols:
+  - RESTful APIs enables the communication between the frontend which runs exclusively on a web browser
+    to the microservices backend. Ingress trafic goes into an NGINX proxy server which then routes them
+    to the correct service.
+  - gRPC is used by Connection when calling functions from Person and Location. Though REST API can also
+    be used in this case, gRPC has more advantages since it uses protocol buffer for data serialization,
+    it makes payloads faster, smaller, and simpler.
+  - Kafka is used for message passing between Location (pub) and Connection (sub).
+    Whenever there's a new location creation request, Location will
+      1. find all locations within a given distance of the new location within a date range,
+      then send a message to update the connection of the person at the new location
+      2. also send messages for each person in the previous query result to update their connections with
+      the person at the new location.
+    Due to the asynchronous nature these queries, REST or gRPC can't be used, the queries' result will be
+    sent to the Kafka message queue.
+
+    As an alternative for Kafka, we can setup a Webhooks in Location to notify Connection with the change
+    when a new location is created.
+    However, some major issues with webhooks are: 1) it doesn't support reconcillation for failed delivery,
+    2) it doesn't take into account the capacity of the receiver's processing power.
+
+
