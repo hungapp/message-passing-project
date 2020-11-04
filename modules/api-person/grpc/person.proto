@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+message PersonResponse {
+  string first_name = 1;
+  string last_name = 2;
+  string company_name = 3;
+}
+
+message PersonId {
+  int32 id = 1;
+}
+
+message Request {}
+
+service PersonService {
+  rpc GetPerson(PersonId) returns (PersonResponse) {}
+  rpc GetPersons(Request) returns (stream PersonResponse) {}
+}

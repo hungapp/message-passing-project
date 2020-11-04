@@ -1,0 +1,15 @@
+version: '3'
+services:
+  web:
+    build:
+      context: ./restful
+    image: restful-api
+    ports:
+      - '5000:5000'
+
+  grpc:
+    build:
+      context: ./grpc
+    image: grpc-api
+    ports:
+      - '50051:50051'
