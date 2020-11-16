@@ -23,9 +23,12 @@ services:
       - zookeeper
 
   postgres:
+    env_file:
+      - postgres.env
     image: 'postgis/postgis:12-2.5-alpine'
     ports:
       - '5432:5432'
+
 
   gateway:
     build:
@@ -34,7 +37,7 @@ services:
     ports:
       - '5000:5000'
 
-  location-rest:
+  location:
     env_file:
       - .env
     build:
@@ -66,3 +69,12 @@ services:
       - '50051:50051'
     depends_on:
       - person-rest
+
+  connection:
+    env_file:
+      - .env
+    build:
+      context: ./api-connection
+    image: connection-rest
+    ports:
+      - '8000:8000'

@@ -2,11 +2,11 @@ FROM python:3.7-alpine
 
 WORKDIR .
 
-RUN apk add --no-cache gcc musl-dev linux-headers geos libc-dev postgresql-dev
-COPY requirements.txt requirements.txt
+RUN apk add --update  --no-cache libstdc++ libc6-compat openssh-client git gcc cython linux-headers make musl-dev python3-dev g++ geos libc-dev postgresql-dev
+COPY . .
 RUN pip install -r requirements.txt
 
-EXPOSE 5000
+EXPOSE 8000
 
 COPY . .
-CMD ["flask", "run", "--host", "0.0.0.0"]
+CMD ["flask", "run", "--host", "0.0.0.0", "--port", "8000"]

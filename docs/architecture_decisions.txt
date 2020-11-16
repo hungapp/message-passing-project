@@ -1,4 +1,6 @@
 Modules:
+  - API Gateway: redirects POST request to Kafka message queue and acts as a proxy to redirect GET
+    requests to correct services
   - Location: has the original logic with one endpoint "/locations" supporting get and post methods.
     Schema and model also remain intact.
   - Person: should just holds the logic for creating and retrieving person data. As such, it also
@@ -8,23 +10,26 @@ Modules:
 
 Message Passing Protocols:
   - RESTful APIs enables the communication between the frontend which runs exclusively on a web browser
-    to the microservices backend. Ingress trafic goes into an NGINX proxy server which then routes them
-    to the correct service.
-  - gRPC is used by Connection when calling functions from Person and Location. Though REST API can also
-    be used in this case, gRPC has more advantages since it uses protocol buffer for data serialization,
-    it makes payloads faster, smaller, and simpler.
-  - Kafka is used for message passing between Location (pub) and Connection (sub).
-    Whenever there's a new location creation request, Location will
-      1. find all locations within a given distance of the new location within a date range,
-      then send a message to update the connection of the person at the new location
-      2. also send messages for each person in the previous query result to update their connections with
-      the person at the new location.
-    Due to the asynchronous nature these queries, REST or gRPC can't be used, the queries' result will be
-    sent to the Kafka message queue.
+    to the microservices backend. Ingress trafic goes into the API gateway will be routed to correct services.
 
-    As an alternative for Kafka, we can setup a Webhooks in Location to notify Connection with the change
-    when a new location is created.
-    However, some major issues with webhooks are: 1) it doesn't support reconcillation for failed delivery,
-    2) it doesn't take into account the capacity of the receiver's processing power.
+  - gRPC is used by Connection to call functions from Person. Though REST API can also be used in this case,
+    gRPC has more advantage since it uses protocol buffer for data serialization, which makes payloads response
+    faster, smaller, and simpler.
+
+  - Kafka is used for message passing between API Gateway (pub) and Location (sub).
+    Location would need a message queue to manage the incoming requests because it's likely that the service
+    will have to receive a large amount of concurrent location update requests at a time, which will
+    potentially cause database write lock.
+    With the message queue in place, the incoming traffic is leveled, the service can process the request
+    at its own pace regardless of the volume of requests from concurrent tasks.
+    Therefore, message queue would provide more reliability and scalability for the system.
+    Whenever there's a location creation request:
+      1. API Gateway will publish a message using the request payload to the "location" topic
+      2. The subscribed service will process each request sequentially
+
+
+In the future, at the Gateway, GraphQL can also be used in place of the conventional RESTful API. Since it
+is very well-supported by React framework, it would enable frontend developers interacting with the backend
+API more efficiently.
 
 

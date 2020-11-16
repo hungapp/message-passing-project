@@ -6,7 +6,7 @@ import grpc
 import person_pb2
 import person_pb2_grpc
 
-from wsgi import app
+import app
 from app.udaconnect.services import PersonService
 
 class PersonGrpcService(person_pb2_grpc.PersonServiceServicer):
