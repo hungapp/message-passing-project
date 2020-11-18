@@ -29,13 +29,9 @@ services:
     ports:
       - '5432:5432'
 
-
-  gateway:
+  reverse-proxy:
     build:
-      context: ./api-gateway
-    image: gateway
-    ports:
-      - '5000:5000'
+      context: ./reverse-proxy
 
   location:
     env_file:
@@ -47,9 +43,14 @@ services:
       - '6000:6000'
     depends_on:
       - gateway
-      - postgres
+      - postgresql
 
-  person-rest:
+  location-kafka:
+    build:
+      context: ./api-location/kafka
+    image: location-kafka
+
+  person:
     env_file:
       - .env
     build:
@@ -59,7 +60,7 @@ services:
       - '7000:7000'
     depends_on:
       - gateway
-      - postgres
+      - postgresql
 
   person-grpc:
     build:
