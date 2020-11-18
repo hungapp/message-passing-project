@@ -1,0 +1,29 @@
+version: '3'
+services:
+  reverse-proxy:
+    build: ../../modules/reverse-proxy
+    image: ${DOCKER_USERNAME}/udaconnect-reverse-proxy
+
+  location:
+    build: ../../modules/api-location/rest
+    image: ${DOCKER_USERNAME}/udaconnect-api-location
+
+  location-kafka:
+    build: ../../modules/api-location/kafka
+    image: ${DOCKER_USERNAME}/udaconnect-api-location-kafka
+
+  person:
+    build: ../../modules/api-person/rest
+    image: ${DOCKER_USERNAME}/udaconnect-api-person
+
+  person-grpc:
+    build: ../../modules/api-person/grpc
+    image: ${DOCKER_USERNAME}/udaconnect-api-person-grpc
+
+  connection:
+    build: ../../modules/api-connection
+    image: ${DOCKER_USERNAME}/udaconnect-api-connection
+
+  frontend:
+    build: ../../modules/frontend
+    image: ${DOCKER_USERNAME}/udaconnect-frontend
