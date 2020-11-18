@@ -22,7 +22,7 @@ services:
     depends_on:
       - zookeeper
 
-  postgres:
+  postgresql:
     env_file:
       - postgres.env
     image: 'postgis/postgis:12-2.5-alpine'

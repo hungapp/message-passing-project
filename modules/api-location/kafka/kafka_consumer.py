@@ -16,6 +16,7 @@ def register_kafka_listener(topic, listener=kafka_listener):
         print("Started Polling for topic:", topic)
         for msg in consumer:
             listener(msg)
+
     logging.warning(f"About to register listener to topic: {topic}")
     t1 = threading.Thread(target=poll)
     t1.start()

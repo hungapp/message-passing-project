@@ -2,7 +2,6 @@ from flask import Flask, jsonify
 from flask_cors import CORS
 from flask_restx import Api
 from flask_sqlalchemy import SQLAlchemy
-from kafka import KafkaConsumer
 
 db = SQLAlchemy()
 
@@ -10,7 +9,6 @@ db = SQLAlchemy()
 def create_app(env=None):
     from app.config import config_by_name
     from app.routes import register_routes
-    from app.kafka-consumer import register_kafka_listener, kafka_listener
 
     app = Flask(__name__)
     app.config.from_object(config_by_name[env or "test"])
@@ -19,7 +17,6 @@ def create_app(env=None):
     CORS(app)  # Set CORS for development
 
     register_routes(api, app)
-    register_kafka_listener('locations', kafka_listener)
     db.init_app(app)
 
 

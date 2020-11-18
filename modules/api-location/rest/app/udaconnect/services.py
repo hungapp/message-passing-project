@@ -39,4 +39,4 @@ class LocationService:
         db.session.add(new_location)
         db.session.commit()
 
-        logging.warning('Location created')
+        return new_location
