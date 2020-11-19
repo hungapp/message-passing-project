@@ -1,0 +1,34 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: udaconnect-reverse-proxy
+spec:
+  ports:
+  - name: http
+    port: 80
+    targetPort: 80
+    nodePort: 30001
+  selector:
+    service: udaconnect-reverse-proxy
+  type: NodePort
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: udaconnect-reverse-proxy
+  labels:
+    service: udaconnect-reverse-proxy
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      service: udaconnect-reverse-proxy
+  template:
+    metadata:
+      labels:
+        service: udaconnect-reverse-proxy
+    spec:
+      containers:
+      - name: udaconnect-reverse-proxy
+        image: hungapp/udaconnect-reverse-proxy:latest
+        imagePullPolicy: Always
