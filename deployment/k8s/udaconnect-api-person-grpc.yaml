@@ -30,7 +30,7 @@ spec:
         service: udaconnect-api-person-grpc
     spec:
       containers:
-      - image: hungapp/udaconnect-api-person-grpc:lastest
+      - image: hungapp/udaconnect-api-person-grpc:latest
         name: udaconnect-api-person-grpc
         imagePullPolicy: Always
 
