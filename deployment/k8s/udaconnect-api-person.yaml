@@ -30,6 +30,7 @@ spec:
         service: udaconnect-api-person
     spec:
       containers:
+
       - image: hungapp/udaconnect-api-person:latest
         name: udaconnect-api-person
         imagePullPolicy: Always
@@ -59,4 +60,9 @@ spec:
             configMapKeyRef:
               name: db-env
               key: DB_PORT
+
+      - image: hungapp/udaconnect-api-person-grpc:lastest
+        name: udaconnect-api-person-grpc
+        imagePullPolicy: Always
+
       restartPolicy: Always
