@@ -7,6 +7,6 @@ COPY requirements.txt requirements.txt
 RUN pip install -r requirements.txt
 COPY . .
 
-EXPOSE 6000
+EXPOSE 5000
 
-CMD ["flask", "run", "--host", "0.0.0.0", "--port", "6000" ]
+CMD ["flask", "run", "--host", "0.0.0.0"]

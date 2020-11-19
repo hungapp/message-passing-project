@@ -6,7 +6,7 @@ RUN apk add --update  --no-cache libstdc++ libc6-compat openssh-client git gcc c
 COPY . .
 RUN pip install -r requirements.txt
 
-EXPOSE 8000
+EXPOSE 5000
 
 COPY . .
-CMD ["flask", "run", "--host", "0.0.0.0", "--port", "8000"]
+CMD ["flask", "run", "--host", "0.0.0.0"]

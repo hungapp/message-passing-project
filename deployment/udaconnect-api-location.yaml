@@ -7,8 +7,8 @@ metadata:
 spec:
   ports:
   - name: http
-    port: 6000
-    targetPort: 6000
+    port: 5000
+    targetPort: 5000
   selector:
     service: udaconnect-api-location
   type: NodePort
