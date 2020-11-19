@@ -19,7 +19,7 @@ class ConnectionService:
     def find_contacts(person_id: int, start_date: datetime, end_date: datetime, meters=5
     ) -> List[Connection]:
 
-        person_channel = grpc.insecure_channel('localhost:50051')
+        person_channel = grpc.insecure_channel('udaconnect-api-person-grpc:50051')
         person_stub = person_pb2_grpc.PersonServiceStub(person_channel)
         """
         Finds all Person who have been within a given distance of a given Person within a date range.
