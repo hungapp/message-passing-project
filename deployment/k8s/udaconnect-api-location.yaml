@@ -6,9 +6,9 @@ metadata:
   name: udaconnect-api-location
 spec:
   ports:
-  - name: http
-    port: 5000
-    targetPort: 5000
+    - name: http
+      port: 5000
+      targetPort: 5000
   selector:
     service: udaconnect-api-location
   type: NodePort
@@ -30,33 +30,37 @@ spec:
         service: udaconnect-api-location
     spec:
       containers:
-      - image: hungapp/udaconnect-api-location:latest
-        name: udaconnect-api-location
-        imagePullPolicy: Always
-        env:
-        - name: DB_USERNAME
-          valueFrom:
-            configMapKeyRef:
-              name: db-env
-              key: DB_USERNAME
-        - name: DB_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              name: db-secret
-              key: DB_PASSWORD
-        - name: DB_NAME
-          valueFrom:
-            configMapKeyRef:
-              name: db-env
-              key: DB_NAME
-        - name: DB_HOST
-          valueFrom:
-            configMapKeyRef:
-              name: db-env
-              key: DB_HOST
-        - name: DB_PORT
-          valueFrom:
-            configMapKeyRef:
-              name: db-env
-              key: DB_PORT
+        - image: hungapp/udaconnect-api-location:latest
+          name: udaconnect-api-location
+          imagePullPolicy: Always
+          env:
+            - name: DB_USERNAME
+              valueFrom:
+                configMapKeyRef:
+                  name: db-env
+                  key: DB_USERNAME
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: db-secret
+                  key: DB_PASSWORD
+            - name: DB_NAME
+              valueFrom:
+                configMapKeyRef:
+                  name: db-env
+                  key: DB_NAME
+            - name: DB_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: db-env
+                  key: DB_HOST
+            - name: DB_PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: db-env
+                  key: DB_PORT
+
+        - image: hungapp/udaconnect-api-location-kafka:latest
+          name: udaconnect-api-location-kafka
+          imagePullPolicy: Always
       restartPolicy: Always

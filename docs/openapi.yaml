@@ -5,7 +5,7 @@ info:
   title: UdaConnect API
 
 servers:
-  - url: 'localhost:5000/{basePath}'
+  - url: 'localhost:30001/{basePath}'
     variables:
       basePath:
         default: api
@@ -87,6 +87,7 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Person'
+
   /persons/{person_id}:
     get:
       tags:
@@ -111,7 +112,7 @@ paths:
         '400':
           description: Bad input parameter
 
-  /connections/{person_id}:
+  /connections/{person_id}/connection:
     get:
       tags:
         - 'connection'

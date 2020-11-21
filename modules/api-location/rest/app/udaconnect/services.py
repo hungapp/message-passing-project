@@ -8,8 +8,8 @@ from app.udaconnect.schemas import LocationSchema
 from geoalchemy2.functions import ST_AsText, ST_Point
 from sqlalchemy.sql import text
 
-import requests
 from flask import g
+import json
 
 logging.basicConfig(level=logging.WARNING)
 logger = logging.getLogger("udaconnect-api")
@@ -47,5 +47,6 @@ class LocationService:
     @staticmethod
     def forward(location_data):
         TOPIC_NAME = "locations"
+        kafka_data = json.dumps(location_data).encode()
         kafka_producer = g.kafka_producer
-        kafka_producer.send(TOPIC_NAME, location_data)
+        kafka_producer.send(TOPIC_NAME, kafka_data)

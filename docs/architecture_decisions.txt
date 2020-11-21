@@ -1,32 +1,35 @@
 Modules:
-  - API Gateway: redirects POST request to Kafka message queue and acts as a proxy to redirect GET
-    requests to correct services
-  - Location: has the original logic with one endpoint "/locations" supporting get and post methods.
+  - Nginx Reverse Proxy: routes request to correct services.
+  - Location: still has the original logic with an endpoint supporting get and post methods.
     Schema and model also remain intact.
   - Person: should just holds the logic for creating and retrieving person data. As such, it also
     uses only one endpoint "/persons" which supports get and post methods.
-  - Connection: now uses a new endpoint "/connections/<person_id>", the logic still remains, however,
-    when and how it works has been improved.
+  - Connection: uses a new endpoint "/connections/<person_id>/connection". It helps set a clearer
+    responsibility separation, which was originally under the "persons" resource.
 
 Message Passing Protocols:
-  - RESTful APIs enables the communication between the frontend which runs exclusively on a web browser
-    to the microservices backend. Ingress trafic goes into the API gateway will be routed to correct services.
+  - RESTful APIs enables the communication between frontend which runs exclusively on a web browser
+    to microservices backend. Ingress trafic goes through the reverse proxy will be routed to correct services.
 
-  - gRPC is used by Connection to call functions from Person. Though REST API can also be used in this case,
-    gRPC has more advantage since it uses protocol buffer for data serialization, which makes payloads response
-    faster, smaller, and simpler.
+  - gRPC is used by Connection to call functions from Person service. Though REST API can also be used
+    in this case, gRPC has more advantages since it uses protocol buffer for data serialization, which makes
+    responses faster, smaller, and simpler.
 
-  - Kafka is used for message passing between API Gateway (pub) and Location (sub).
+  - Kafka is used for message queue to process POST requests for Location.
     Location would need a message queue to manage the incoming requests because it's likely that the service
-    will have to receive a large amount of concurrent location update requests at a time, which will
+    will have to receive a large amount of concurrent location update requests at a same time, which will
     potentially cause database write lock.
-    With the message queue in place, the incoming traffic is leveled, the service can process the request
-    at its own pace regardless of the volume of requests from concurrent tasks.
+    With the message queue in place, the incoming traffic is leveled, the service can process the requests
+    at its own pace regardless of the volume of requests.
     Therefore, message queue would provide more reliability and scalability for the system.
-    Whenever there's a location creation request:
-      1. API Gateway will publish a message using the request payload to the "location" topic
-      2. The subscribed service will process each request sequentially
+    Overall, whenever there's a location creation request:
+      1. Location service will publish a message using the request payload to the "location" topic
+      2. Location-kafka service, which subscribes to the same topic, will process each request sequentially
 
+Implementation Note:
+  - Person Grpc is deployed as a single pod.
+  - Location Kafka Consumer is decoupled from Location Flask app so is deployed using sidecar pattern,
+    location pod hosting 2 containers.
 
 In the future, at the Gateway, GraphQL can also be used in place of the conventional RESTful API. Since it
 is very well-supported by React framework, it would enable frontend developers interacting with the backend

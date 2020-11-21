@@ -1,0 +1,2 @@
+Grpc is being used by Connection service to call GetPersons function from Person service.
+Therefore, no sample request is needed.
