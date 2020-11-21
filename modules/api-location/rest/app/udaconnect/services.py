@@ -47,6 +47,5 @@ class LocationService:
     @staticmethod
     def forward(location_data):
         TOPIC_NAME = "locations"
-        kafka_data = json.dumps(location_data).encode()
         kafka_producer = g.kafka_producer
-        kafka_producer.send(TOPIC_NAME, kafka_data)
+        kafka_producer.send(TOPIC_NAME, location_data)

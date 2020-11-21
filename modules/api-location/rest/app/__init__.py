@@ -2,7 +2,7 @@ from flask import Flask, jsonify, g
 from flask_cors import CORS
 from flask_restx import Api
 from flask_sqlalchemy import SQLAlchemy
-from kafka import KafkaProduce
+from kafka import KafkaProducer
 
 db = SQLAlchemy()
 
